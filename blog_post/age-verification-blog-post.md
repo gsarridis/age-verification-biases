@@ -75,36 +75,27 @@ Stubble pushes MiVOLO's prediction up by **7.6 years on average**, and ViT Age C
 
 ### Flip rates: how often does a minor get reclassified as ≥13?
 
-The most actionable number is the **flip rate**: of the minors the model originally classified as under 13, what fraction does it now classify as ≥13 after we apply the manipulation? This is exactly the attack surface a platform cares about.
+Of the minors the model originally classified as under 13, what fraction does it now classify as ≥13 after we apply the manipulation? 
 
 ![Flip rate: fraction of correctly-classified minors that cross the threshold after manipulation](flip_rates.png)
 
-For MiVOLO under stubble, **59% of correctly-classified minors flip to adult** — 357 children out of the at-risk population, rendered invisible to the age gate by a drawn-on beard. ViT Age Classifier flips 37%. FairFace, the most robust here, still flips 18% — roughly one in five.
+For MiVOLO under stubble, **59% of correctly-classified minors flip to adult**. ViT Age Classifier flips 37%. FairFace, the most robust here, still flips 18% — roughly one in five.
 
-Eye makeup flips 6–20% of minors depending on the model. Even the relatively innocuous thin mustache flips up to 8%.
+Eye makeup flips 6–20% of minors depending on the model. Even the less impactful manipulation, i.e., thin mustache flips up to 8%.
 
-### Where do the biases live?
-
-Two patterns stand out and they matter for anyone deploying these systems:
-
-1. **The most accurate baseline model is the most fragile.** MiVOLO had the strongest baseline binary accuracy on minors, yet it is by far the easiest to fool with stubble. This is the classic robustness-accuracy tradeoff showing up in a safety-critical setting, and it argues against picking a model on benchmark accuracy alone when the deployment context is age gating.
-
-2. **Models have implicitly learned that facial hair = adult.** That's a sensible prior on natural photographs, but in a deployment where the input is adversarial — a child who *wants* to be classified as older — it is a single point of failure. The stubble manipulation works because the model has tied a *secondary sexual characteristic* to age in a way that is easy to spoof with a marker. The same model that fails on stubble at 59% fails on a thin mustache at only 1%, because a mustache without a beard reads as "child playing dress-up" in the training distribution — but stubble triggers the adult prior cleanly.
-
-The mirror-image bias is also worth flagging: heavy eye makeup, traditionally coded as feminine adult, pushes predictions up for all three models too, just less dramatically.
 
 ## Why this matters
 
-The framing for this work is not "AI age estimation is bad." It's that **platforms relying on these models as a meaningful safety layer are protected by a thinner margin than they probably realize**. A 10-year-old who wants an Instagram account does not need a deepfake, a diffusion model, or any technical skill. They need a marker and three minutes in front of a mirror.
+**Platforms relying on these models as a meaningful safety layer are protected by a thinner margin than they probably realize**. A 10-year-old who wants an Instagram account does not need a deepfake, a diffusion model, or any technical skill. They need a marker and three minutes in front of a mirror.
 
 This has direct policy implications:
 
-- **Age estimation should not be a single-layer defense.** It should be combined with behavioral signals, network signals, and human review for borderline cases — and the binary threshold should be treated as a probabilistic estimate, not a verdict.
+- **Age estimation should not be a single-layer defense.** It should be combined with behavioral signals, network signals, and human review for borderline cases — and the binary threshold should be treated as a probabilistic estimate.
 - **Robustness to trivial physical manipulations should be a benchmark.** Right now, age models are evaluated on clean test sets. The relevant test set for deployment is one in which the adversary is a motivated minor.
-- **The most accurate model is not necessarily the safest choice.** In our experiments, the model with the strongest clean-data baseline was the easiest to fool. Procurement decisions for age verification should weigh adversarial robustness alongside accuracy.
+- **The most accurate model is not necessarily the safest choice.** Methodologies on spurious correlation biases, shortcut learning, and out-of-distribution generalization are directly relevant to this task and should be employed to enhance the robustness of such models.
 
-We are releasing the manipulation pipeline and the evaluation scripts for other researchers and platforms to test their own models. If you maintain an age verification system and want to stress-test it against this benchmark, please get in touch.
+We are releasing the manipulation pipeline and the evaluation scripts for other researchers and platforms to test their own models. If you maintain an age verification system and you need help to audit it in such scenarios, please get in touch.
 
 ---
 
-*This work was carried out by the MeVer group at CERTH-ITI. All manipulations were generated with classic OpenCV operations; no generative AI was involved. The UTKFace dataset is used under its standard research license.*
+*This work was carried out by the MeVer group at CERTH-ITI. All manipulations were generated with classic OpenCV operations; no generative AI was involved. The UTKFace dataset is used under its standard non-commercial research license.*
