@@ -1,5 +1,5 @@
 ---
-title: Fooling Age Verification with a Marker: How Trivial Manipulations Push Minors Across the Adult Threshold                          // Post title
+title: Fooling Age Verification with a Marker: How Trivial Manipulations Push Minors Across the Age Threshold                          // Post title
 image:
   caption: Example caption                    // Caption for the featured image (If any). If you don't have a featured image or you don't want to include a catpion leave it empty 
 profile: true                                 // Set always to true
