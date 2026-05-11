@@ -1,0 +1,85 @@
+# Default experiment configuration.
+# Override individual fields by passing --override key=value to scripts,
+# or by maintaining a separate YAML and passing --config path/to/other.yaml.
+
+experiment:
+  name: baseline
+  seed: 42
+  output_dir: results          # All intermediate artifacts go here.
+  report_dir: outputs          # Final plots/CSVs go here.
+
+dataset:
+  name: utkface
+  # Set via env var UTKFACE_DIR or directly here.
+  root: ${UTKFACE_DIR}
+  # Drop samples whose face we cannot detect / align.
+  require_face_detection: true
+  # Use the *aligned & cropped* variant of UTKFace if available.
+  prefer_aligned: true
+
+# ----- Test-set construction -----
+test_sets:
+  set_a_balanced:
+    enabled: true
+    n_per_bin: 500              # 500 minors + 500 adults => 1000 samples.
+    minor_age_range: [6, 12]    # We exclude 0-1 (often unreliable annotations).
+    adult_age_range: [14, 20]   # Avoid edge cases near the threshold.
+    threshold_age: 13
+
+  set_b_minors_manipulated:
+    enabled: true
+    n_samples: 2000              # All <13. Each gets every manipulation applied.
+    age_range: [6, 12]          # Restrict to ages where overlays look sensible.
+
+# ----- Manipulations -----
+manipulations:
+  classical:
+    enabled: true
+    list:
+      - mustache_thin
+      - beard_stubble
+      - eye_makeup_heavy
+  genai:
+    enabled: false              # Flip to true after you install requirements-genai.txt.
+    model_id: stabilityai/stable-diffusion-2-inpainting
+    list: []
+    guidance_scale: 7.5
+    num_inference_steps: 30
+    strength: 0.85
+
+# ----- Models under test -----
+# Three models cover three different architectural families:
+#   * MiVOLO  — SoTA transformer, regression head
+#   * FairFace — ResNet34 trained for demographic fairness, 9-bucket classifier
+#   * ViT     — HuggingFace transformer, 9-bucket classifier
+models:
+  - name: deepface_age
+    enabled: false                   # Disabled per current experiment scope.
+    backend: deepface
+    detector_backend: retinaface
+  - name: mivolo
+    enabled: true
+    backend: mivolo
+    weights: assets/weights/model_only_age_imdb_4.29.pth
+  - name: fairface
+    enabled: true
+    backend: fairface
+    weights: assets/weights/fairface_alldata_4race_20191111.pt
+  - name: insightface_genderage
+    enabled: false                   # Disabled per current experiment scope.
+    backend: insightface
+  - name: vit_age_classifier
+    enabled: true
+    backend: hf_transformers
+    model_id: nateraw/vit-age-classifier
+
+# ----- Evaluation -----
+evaluation:
+  primary_threshold: 13            # Facebook's minimum age for using the platform.
+  secondary_thresholds: [16, 18]   # Common age-verification thresholds (UK, EU, US).
+  bootstrap_iters: 1000
+  per_age_breakdown: true
+  manipulation_filter:
+    - mustache_thin
+    - beard_stubble
+    - eye_makeup_heavy

@@ -1,0 +1,7 @@
+# Optional dependencies for the GenAI inpainting manipulation pipeline.
+# Install only if you set manipulations.genai.enabled: true in your config.
+
+diffusers>=0.27
+accelerate>=0.30
+safetensors>=0.4
+xformers>=0.0.23       # Memory-efficient attention. Optional but recommended.
