@@ -88,13 +88,18 @@ Eye makeup flips 6–20% of minors depending on the model. Even the less impactf
 
 **Platforms relying on these models as a meaningful safety layer are protected by a thinner margin than they probably realize**. A 10-year-old who wants an Instagram account does not need a deepfake, a diffusion model, or any technical skill. They need a marker and three minutes in front of a mirror.
 
-This has direct policy implications:
+Our results point to the following technical recommendations::
 
 - **Age estimation should not be a single-layer defense.** It should be combined with behavioral signals, network signals, and human review for borderline cases — and the binary threshold should be treated as a probabilistic estimate.
 - **Robustness to trivial physical manipulations should be a benchmark.** Right now, age models are evaluated on clean test sets. The relevant test set for deployment is one in which the adversary is a motivated minor.
 - **The most accurate model is not necessarily the safest choice.** Methodologies on spurious correlation biases, shortcut learning, and out-of-distribution generalization are directly relevant to this task and should be employed to enhance the robustness of such models.
 
 We are releasing the manipulation pipeline and the evaluation scripts for other researchers and platforms to test their own models. If you maintain an age verification system and you need help to audit it in such scenarios, please get in touch.
+
+### Zooming out: Is age verification even the right task?
+ 
+Even if we patched every robustness issue we identified, we would still be left with a more uncomfortable question — whether automated age verification is a meaningful goal in the first place. As [Elisa Lindinger argues for Internet Exchange](https://internet.exchangepoint.tech/see-no-evil-speak-no-evil-hear-no-evil/), the mental-health framing that drives age-gating laws — "children are suffering because of social media" — collapses a complex picture (poverty, climate anxiety, post-pandemic isolation, shrinking unsupervised public spaces) into a single technical fix. Banning a 12-year-old from Instagram does not address why they were on Instagram in the first place. It removes one of the few spaces where many children currently find peers, information, and community, often without offering an alternative. By banning children from social media, we are choosing not to ask social media to change. The design choices that actually drive harm — engagement-maximising recommendation, dark patterns, advertising, feeds optimised for time-on-platform rather than wellbeing — remain untouched at the largest platforms. And much of what is described as harmful to children is harmful to all of us. 
+ 
 
 ---
 
