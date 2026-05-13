@@ -94,7 +94,7 @@ Our results point to the following technical recommendations::
 - **Robustness to trivial physical manipulations should be a benchmark.** Right now, age models are evaluated on clean test sets. The relevant test set for deployment is one in which the adversary is a motivated minor.
 - **The most accurate model is not necessarily the safest choice.** Methodologies on spurious correlation biases, shortcut learning, and out-of-distribution generalization are directly relevant to this task and should be employed to enhance the robustness of such models.
 
-We are releasing the manipulation pipeline and the evaluation scripts for other researchers and platforms to test their own models. If you maintain an age verification system and you need help to audit it in such scenarios, please get in touch.
+The full code is publicly available on [GitHub](https://github.com/gsarridis/age-verification-biases). If you maintain an age verification system and you need help to audit it in such scenarios, please get in touch.
 
 ### Zooming out: Is age verification even the right task?
  
